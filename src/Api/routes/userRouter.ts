@@ -5,7 +5,7 @@ import { DatabaseModel } from 'Infrastructure/Models';
 
 const userRouter = Router();
 
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', async (_req, res) => {
   const db: DatabaseModel = new Database();
   await db.connectToDb();
   const userService: UserServiceModel = new UserService();
