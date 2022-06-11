@@ -1,35 +1,13 @@
 import { Router } from 'express';
-import Database from 'Infrastructure/Database'
-import { UserService, UserServiceModel } from 'Application/Services';
-import { DatabaseModel } from 'Infrastructure/Models';
+
+import { userController } from '../controllers';
 
 const userRouter = Router();
 
-userRouter.get('/', async (_req, res) => {
-  const db: DatabaseModel = new Database();
-  await db.connectToDb();
-  const userService: UserServiceModel = new UserService();
-  const usersList = await userService.getAll();
-  await db.disconnect();
-  res.json(usersList);
-});
-
-userRouter.get('/:id', async (req, res) => {
-  const db: DatabaseModel = new Database();
-  await db.connectToDb();
-  const userService: UserServiceModel = new UserService();
-  const user = await userService.getById(req.params.id);
-  await db.disconnect();
-  res.json(user);
-});
-
-userRouter.post('/', async (req, res) => {
-  const db: DatabaseModel = new Database();
-  await db.connectToDb();
-  const userService: UserServiceModel = new UserService();
-  const user = await userService.create(req.body);
-  await db.disconnect();
-  res.json(user);
-});
+userRouter.get('/', userController.getAll);
+userRouter.get('/:id', userController.getById);
+userRouter.post('/', userController.create);
+userRouter.put('/:id', userController.update);
+userRouter.delete('/:id', userController.delete);
 
 export default userRouter;

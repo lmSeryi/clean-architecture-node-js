@@ -1,5 +1,6 @@
-import { CourseServiceModel } from '../index';
+import { CourseServiceModel } from './index';
 import { Course, CourseModel } from 'Domain/Entities';
+import { FilterQuery } from 'mongoose';
 
 export default class CourseService implements CourseServiceModel {
 
@@ -11,7 +12,11 @@ export default class CourseService implements CourseServiceModel {
     await Course.deleteOne({ _id: id }).exec();
   }
 
-  async get(id: string): Promise<CourseModel | null> {
+  async get(params: FilterQuery<CourseModel>): Promise<CourseModel | null> {
+    return Course.findOne(params).exec();
+  }
+
+  async getById(id: string): Promise<CourseModel | null> {
     return Course.findById(id).exec();
   }
 

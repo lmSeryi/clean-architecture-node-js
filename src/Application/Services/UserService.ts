@@ -1,5 +1,5 @@
 import { FilterQuery } from 'mongoose';
-import { UserServiceModel } from '../index';
+import { UserServiceModel } from './index';
 import { User, UserModel } from 'Domain/Entities';
 
 export default class UserService implements UserServiceModel {
