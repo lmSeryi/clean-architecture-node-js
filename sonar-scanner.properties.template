@@ -1,0 +1,10 @@
+sonar.projectKey=
+sonar.sources=.
+sonar.host.url=
+sonar.projectVersion=
+sonar.sourceEncoding=UTF-8
+sonar.eslint.eslintconfigpath=eslint.json
+sonar.exclusions=node_modules/*,coverage/lcov-report/*
+sonar.javascript.lcov.reportPaths=./coverage/lcov.info
+sonar.login=
+sonar.password=

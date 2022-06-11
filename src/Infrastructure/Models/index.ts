@@ -1,0 +1,1 @@
+export type { default as DatabaseModel } from './Database.model';
