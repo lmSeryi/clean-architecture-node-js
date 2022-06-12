@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 
 import { StudentServiceModel } from '.';
-import { Student, StudentModel } from '@domain/Entities';
+import { StudentModel } from '@domain/Entities';
 import { FilterQuery } from 'mongoose';
 import { StudentRepositoryModel, StudentRepository } from '@infra/index';
 
