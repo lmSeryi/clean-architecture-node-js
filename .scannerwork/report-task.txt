@@ -2,5 +2,5 @@ projectKey=personal-clean
 serverUrl=http://localhost:9000
 serverVersion=9.4.0.54424
 dashboardUrl=http://localhost:9000/dashboard?id=personal-clean
-ceTaskId=AYFVQoEkFCvdeS1RduQl
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYFVQoEkFCvdeS1RduQl
+ceTaskId=AYFVTClBFCvdeS1RduQn
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYFVTClBFCvdeS1RduQn

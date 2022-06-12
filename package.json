@@ -4,10 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "start": "NODE_PATH=./dist node ./dist/Api/index.js",
     "build": "tsc",
-    "dev": "NODE_PATH=./src ts-node ./src/Api/index.ts"
+    "dev": "ts-node ./src/Api/index.ts"
+  },
+  "_moduleAliases": {
+    "@api": "./dist/Api",
+    "@infra": "./dist/Infrastructure",
+    "@domain": "./dist/Domain",
+    "@test": "./dist/tests",
+    "@app": "./dist/Application"
   },
   "keywords": [],
   "author": "",
@@ -16,13 +23,27 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "helmet": "^5.1.0",
-    "mongoose": "^6.3.6"
+    "mongoose": "^6.3.6",
+    "reflect-metadata": "^0.1.13",
+    "typedi": "^0.10.0",
+    "zod": "^3.17.3"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-typescript": "^7.17.12",
     "@types/express": "^4.17.13",
+    "@types/jest": "^28.1.1",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^17.0.42",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8.17.0",
+    "jest": "^28.1.1",
+    "module-alias": "^2.2.2",
+    "supertest": "^6.2.3",
+    "ts-jest": "^28.0.4",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.3"
   }

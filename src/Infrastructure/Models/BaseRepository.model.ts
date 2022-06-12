@@ -1,6 +1,6 @@
 import { FilterQuery } from 'mongoose';
 
-interface BaseServiceModel<CollectionModel> {
+interface BaseRepositoryModel<CollectionModel> {
   get(params: FilterQuery<CollectionModel>): Promise<CollectionModel | null>;
   getById(id: string): Promise<CollectionModel | null>;
   getPage(page: number, limit: number): Promise<CollectionModel[]>;
@@ -10,4 +10,4 @@ interface BaseServiceModel<CollectionModel> {
   delete(id: string): Promise<void>;
 }
 
-export default BaseServiceModel;
+export default BaseRepositoryModel;

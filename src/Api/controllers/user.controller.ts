@@ -1,52 +1,56 @@
 import { Request, Response } from 'express';
 
-import { DatabaseModel } from 'Infrastructure/Models';
-import Database from 'Infrastructure/Database';
+import { UserService, UserServiceModel } from '@app/Services';
+import { createUserValidation, updateUserValidation } from '@app/Validations';
+import { dbAndDependency } from '@app/DependencyInjection';
 
-import { UserService, UserServiceModel } from 'Application/Services';
+type User = typeof UserService;
+const startDbAndDependency = dbAndDependency<UserServiceModel, User>;
 
 export default {
   async getAll(_req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const userService: UserServiceModel = new UserService();
-    const usersList = await userService.getAll();
+    const { service, db } = await startDbAndDependency(UserService);
+    const usersList = await service.getAll();
     await db.disconnect();
-    res.json(usersList);
+    res.status(200).json(usersList);
   },
 
   async getById(req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const userService: UserServiceModel = new UserService();
-    const user = await userService.getById(req.params.id);
+    const { service, db } = await startDbAndDependency(UserService);
+    const user = await service.getById(req.params.id);
     await db.disconnect();
     res.json(user);
   },
 
   async create(req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const userService: UserServiceModel = new UserService();
-    const user = await userService.create(req.body);
+    const validationResult = await createUserValidation.safeParseAsync(req.body);
+    if (!validationResult.success) {
+      const response = validationResult.error.flatten();
+      return res.status(400).json({ ...response.fieldErrors });
+    }
+    const { service, db } = await startDbAndDependency(UserService);
+    const user = await service.create(req.body);
     await db.disconnect();
-    res.json(user);
+    res.status(201).json(user);
   },
 
   async update(req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const userService: UserServiceModel = new UserService();
-    const user = await userService.update(req.body);
+    const { id } = req.params;
+    const validationResult = await updateUserValidation.safeParseAsync(req.body);
+    if (!validationResult.success) {
+      const response = validationResult.error.flatten();
+      return res.status(400).json({ ...response.fieldErrors });
+    }
+    const { service, db } = await startDbAndDependency(UserService);
+    const user = await service.update(id, req.body);
     await db.disconnect();
     res.json(user);
   },
 
   async delete(req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const userService: UserServiceModel = new UserService();
-    const user = await userService.delete(req.params.id);
+    const { id } = req.params;
+    const { service, db } = await startDbAndDependency(UserService);
+    const user = await service.delete(id);
     await db.disconnect();
     res.json(user);
   }

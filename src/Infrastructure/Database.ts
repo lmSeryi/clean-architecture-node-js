@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import type { DatabaseModel } from './Models';
+import { DatabaseConnectionResponse } from '../interfaces';
 
 
 export default class Database implements DatabaseModel {
@@ -11,22 +12,35 @@ export default class Database implements DatabaseModel {
    * 3 = disconnecting
    */
 
-  async connectToDb() {
-    console.log(process.env.MONGODB_URI);
-    if (this.#connection == 1) return
-    if (mongoose.connections.length > 0) {
-      this.#connection = 1;
-      this.#connection = mongoose.connections[0].readyState;
+  async connectToDb(): Promise<DatabaseConnectionResponse> {
+    if (this.#connection === 1) return { connection: 1, hasError: false };
+    try {
+      if (mongoose.connections.length > 0) {
+        this.#connection = 1;
+        this.#connection = mongoose.connections[0].readyState;
 
-      if (this.#connection === 1) return;
+        if (this.#connection === 1) return { connection: 1, hasError: false };
+      }
+      await mongoose.connect(process.env.MONGODB_URI || "");
+      this.#connection = 1;
+      return { connection: 1, hasError: false };
+    } catch (error: any) {
+      const message = error.message ?? 'Unknown error';
+      this.#connection = 0;
+      return { connection: 0, error: message, hasError: true };
     }
-    await mongoose.connect(process.env.MONGODB_URI || "");
-    this.#connection = 1;
   }
 
-  async disconnect() {
-    if (process.env.NODE_ENV === 'development') return;
-    if (this.#connection === 0) return;
-    await mongoose.disconnect();
+  async disconnect(): Promise<DatabaseConnectionResponse> {
+    if (process.env.NODE_ENV === 'development') return { connection: 1, hasError: false };
+    if (this.#connection === 0) return { connection: 0, hasError: false };
+    try {
+      await mongoose.disconnect();
+      this.#connection = 0;
+      return { connection: 0, hasError: false };
+    } catch (error: any) {
+      const message = error.message ?? 'Unknown error';
+      return { connection: 0, error: message, hasError: true };
+    }
   }
 }

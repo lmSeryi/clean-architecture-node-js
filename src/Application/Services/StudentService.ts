@@ -1,35 +1,45 @@
-import { StudentServiceModel } from '.';
-import { Student, StudentModel } from 'Domain/Entities';
-import { FilterQuery } from 'mongoose';
+import { Service } from 'typedi';
 
+import { StudentServiceModel } from '.';
+import { Student, StudentModel } from '@domain/Entities';
+import { FilterQuery } from 'mongoose';
+import { StudentRepositoryModel, StudentRepository } from '@infra/index';
+
+@Service()
 export default class StudentService implements StudentServiceModel {
+  readonly #studentRepository: StudentRepositoryModel;
+  constructor(
+    studentRepository: StudentRepository
+  ) {
+    this.#studentRepository = studentRepository;
+  }
 
   async create(model: StudentModel): Promise<StudentModel> {
-    return new Student(model).save();
+    return this.#studentRepository.create(model);
   }
 
   async delete(id: string): Promise<void> {
-    await Student.deleteOne({ _id: id }).exec();
+    await this.#studentRepository.delete(id);
   }
 
   async get(params: FilterQuery<StudentModel>): Promise<StudentModel | null> {
-    return Student.findOne(params).exec();
+    return this.#studentRepository.get(params);
   }
 
   async getById(id: string): Promise<StudentModel | null> {
-    return Student.findById(id).exec();
+    return this.#studentRepository.getById(id);
   }
 
   async getAll(): Promise<StudentModel[]> {
-    return Student.find().exec();
+    return this.#studentRepository.getAll();
   }
 
-  async update(model: StudentModel): Promise<StudentModel | null> {
-    return Student.findByIdAndUpdate(model._id, model).exec();
+  async update(id: string, model: StudentModel): Promise<StudentModel | null> {
+    return this.#studentRepository.update(id, model);
   }
 
   async getPage(page: number, limit: number): Promise<StudentModel[]> {
-    return Student.find().skip((page - 1) * limit).limit(limit).exec();
+    return this.#studentRepository.getPage(page, limit);
   }
 
 }

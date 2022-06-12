@@ -1,5 +1,5 @@
 import BaseService from './BaseService.model';
-import { CourseModel } from 'Domain/Entities';
+import { CourseModel } from '@domain/Entities';
 
 interface CourseServiceModel extends BaseService<CourseModel> {}
 

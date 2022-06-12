@@ -1,35 +1,45 @@
-import { CourseServiceModel } from './index';
-import { Course, CourseModel } from 'Domain/Entities';
-import { FilterQuery } from 'mongoose';
+import { Service } from 'typedi';
 
+import { CourseServiceModel } from './index';
+import { CourseModel } from '@domain/Entities';
+import { FilterQuery } from 'mongoose';
+import { CourseRepositoryModel, CourseRepository } from '@infra/index';
+
+@Service()
 export default class CourseService implements CourseServiceModel {
+  readonly #courseRepository: CourseRepositoryModel;
+  constructor(
+    courseRepository: CourseRepository
+  ) {
+    this.#courseRepository = courseRepository;
+  }
 
   async create(model: CourseModel): Promise<CourseModel> {
-    return new Course(model).save();
+    return this.#courseRepository.create(model);
   }
 
   async delete(id: string): Promise<void> {
-    await Course.deleteOne({ _id: id }).exec();
+    await this.#courseRepository.delete(id);
   }
 
   async get(params: FilterQuery<CourseModel>): Promise<CourseModel | null> {
-    return Course.findOne(params).exec();
+    return this.#courseRepository.get(params);
   }
 
   async getById(id: string): Promise<CourseModel | null> {
-    return Course.findById(id).exec();
+    return this.#courseRepository.getById(id);
   }
 
   async getAll(): Promise<CourseModel[]> {
-    return Course.find().exec();
+    return this.#courseRepository.getAll();
   }
 
-  async update(model: CourseModel): Promise<CourseModel | null> {
-    return Course.findByIdAndUpdate(model._id, model).exec();
+  async update(id: string, model: CourseModel): Promise<CourseModel | null> {
+    return this.#courseRepository.update(id, model);
   }
 
   async getPage(page: number, limit: number): Promise<CourseModel[]> {
-    return Course.find().skip((page - 1) * limit).limit(limit).exec();
+    return this.#courseRepository.getPage(page, limit);
   }
 
 }

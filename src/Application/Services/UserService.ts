@@ -1,35 +1,45 @@
+import { Service } from 'typedi';
+
 import { FilterQuery } from 'mongoose';
 import { UserServiceModel } from './index';
-import { User, UserModel } from 'Domain/Entities';
+import { UserModel } from '@domain/Entities';
+import { UserRepositoryModel, UserRepository } from '@infra/index';
 
+@Service()
 export default class UserService implements UserServiceModel {
+  readonly #userRepository: UserRepositoryModel;
+  constructor(
+    userRepository: UserRepository
+  ) {
+    this.#userRepository = userRepository;
+  }
 
   async create(model: UserModel): Promise<UserModel> {
-    return new User(model).save();
+    return this.#userRepository.create(model);
   }
 
   async delete(id: string): Promise<void> {
-    await User.deleteOne({ _id: id }).exec();
+    await this.#userRepository.delete(id);
   }
 
   async get(params: FilterQuery<UserModel>): Promise<UserModel | null> {
-    return User.findOne(params).exec();
+    return this.#userRepository.get(params);
   }
 
   async getById(id: string): Promise<UserModel | null> {
-    return User.findById(id).exec();
+    return this.#userRepository.getById(id);
   }
 
   async getAll(): Promise<UserModel[]> {
-    return User.find().exec();
+    return this.#userRepository.getAll();
   }
 
-  async update(model: UserModel): Promise<UserModel | null> {
-    return User.findByIdAndUpdate(model._id, model).exec();
+  async update(id: string, model: UserModel): Promise<UserModel | null> {
+    return this.#userRepository.update(id, model);
   }
 
   async getPage(page: number, limit: number): Promise<UserModel[]> {
-    return User.find().skip((page - 1) * limit).limit(limit).exec();
+    return this.#userRepository.getPage(page, limit);
   }
 
 }

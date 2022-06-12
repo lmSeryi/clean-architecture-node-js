@@ -1,52 +1,46 @@
 import { Request, Response } from 'express';
 
-import { DatabaseModel } from 'Infrastructure/Models';
-import Database from 'Infrastructure/Database';
+import { TeacherService, TeacherServiceModel } from '@app/Services';
+import { dbAndDependency } from '@app/DependencyInjection';
 
-import { TeacherService, TeacherServiceModel } from 'Application/Services';
+type Teacher = typeof TeacherService;
+const startDbAndDependency = dbAndDependency<TeacherServiceModel, Teacher>;
 
 export default {
   async getAll(_req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const teacherService: TeacherServiceModel = new TeacherService();
-    const teachersList = await teacherService.getAll();
+    const { service, db } = await startDbAndDependency(TeacherService);
+    const teachersList = await service.getAll();
     await db.disconnect();
     res.json(teachersList);
   },
 
   async getById(req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const teacherService: TeacherServiceModel = new TeacherService();
-    const teacher = await teacherService.getById(req.params.id);
+    const { id } = req.params;
+    const { service, db } = await startDbAndDependency(TeacherService);
+    const teacher = await service.getById(id);
     await db.disconnect();
     res.json(teacher);
   },
 
   async create(req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const teacherService: TeacherServiceModel = new TeacherService();
-    const teacher = await teacherService.create(req.body);
+    const { service, db } = await startDbAndDependency(TeacherService);
+    const teacher = await service.create(req.body);
     await db.disconnect();
     res.json(teacher);
   },
 
   async update(req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const teacherService: TeacherServiceModel = new TeacherService();
-    const teacher = await teacherService.update(req.body);
+    const { id } = req.params;
+    const { service, db } = await startDbAndDependency(TeacherService);
+    const teacher = await service.update(id, req.body);
     await db.disconnect();
     res.json(teacher);
   },
 
   async delete(req: Request, res: Response) {
-    const db: DatabaseModel = new Database();
-    await db.connectToDb();
-    const teacherService: TeacherServiceModel = new TeacherService();
-    const teacher = await teacherService.delete(req.params.id);
+    const { id } = req.params;
+    const { service, db } = await startDbAndDependency(TeacherService);
+    const teacher = await service.delete(id);
     await db.disconnect();
     res.json(teacher);
   }

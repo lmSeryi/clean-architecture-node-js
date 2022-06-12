@@ -1,6 +1,8 @@
+import { DatabaseConnection } from '../../interfaces';
+
 interface Database {
-    connectToDb: () => Promise<void>;
-    disconnect: () => Promise<void>;
+    connectToDb: () => Promise<DatabaseConnection>;
+    disconnect: () => Promise<DatabaseConnection>;
 }
 
 export default Database;
