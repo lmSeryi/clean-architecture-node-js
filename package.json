@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
-    "start": "NODE_PATH=./dist node ./dist/Api/index.js",
+    "start": "npm run build && NODE_PATH=./dist node ./dist/Api/index.js",
     "build": "tsc",
     "dev": "ts-node ./src/Api/index.ts",
     "lint": "eslint src/**/*.ts --fix"
