@@ -29,9 +29,15 @@ export default {
       return res.status(400).json({ ...response.fieldErrors });
     }
     const { service, db } = await startDbAndDependency(UserService);
-    const user = await service.create(req.body);
-    await db.disconnect();
-    res.status(201).json(user);
+    try {
+      const user = await service.create(req.body);
+      await db.disconnect();
+      res.status(201).json(user);
+    } catch (error: unknown) {
+      await db.disconnect();
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      res.status(400).json({ error: message });
+    }
   },
 
   async update(req: Request, res: Response) {
@@ -53,5 +59,5 @@ export default {
     const user = await service.delete(id);
     await db.disconnect();
     res.json(user);
-  }
-}
+  },
+};

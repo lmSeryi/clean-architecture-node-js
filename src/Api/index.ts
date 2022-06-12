@@ -18,7 +18,7 @@ app.use(express.json());
 app.use('/api/v1/', routes);
 
 app.listen(PORT, () => {
-	console.log(`Server started on port ${ PORT }`);
+  console.log(`Server started on port ${ PORT }`);
 });
 
 export default app;

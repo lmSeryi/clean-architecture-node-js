@@ -41,6 +41,7 @@
     "@typescript-eslint/parser": "^5.27.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.17.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "jest": "^28.1.1",
     "module-alias": "^2.2.2",
     "supertest": "^6.2.3",

@@ -44,4 +44,4 @@ export default {
     await db.disconnect();
     res.json(course);
   }
-}
+};

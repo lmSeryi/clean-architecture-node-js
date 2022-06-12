@@ -8,9 +8,9 @@ interface Passwords {
 const areEqualPassword = ({ password, confirmPassword }: Passwords) => password === confirmPassword;
 
 const errorMessage = {
-  message: "Passwords don't match",
+  message: 'Passwords don\'t match',
   path: ['confirmPassword'],
-}
+};
 
 export const createUserValidation = z.object({
   username: z.string().email(),
