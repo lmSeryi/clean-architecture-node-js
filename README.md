@@ -8,13 +8,23 @@
 npm install
 ```
 
-- Run docker-compose.
+###### Optional
+- Run docker-compose to set up the DB.
 
 ````sh
 docker-compose up
 ````
 
+### Env Variables
+
+- DB_URI: If you are running in localhost, please 127.0.0.1 instead.
+- PORT
+
 #### Development Environment
+- Build the app.
+```sh
+npm run build 
+```
 
 - Run the app.
 

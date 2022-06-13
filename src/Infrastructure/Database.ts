@@ -21,7 +21,10 @@ export default class Database implements DatabaseModel {
 
         if (this.#connection === 1) return { connection: 1, hasError: false };
       }
-      await mongoose.connect(process.env.MONGODB_URI || '');
+      console.log('Connecting to database...');
+      console.log(process.env.DB_URI);
+      await mongoose.connect(process.env.DB_URI || '');
+      console.log('Connected to database');
       this.#connection = 1;
       return { connection: 1, hasError: false };
     } catch (error: unknown) {
